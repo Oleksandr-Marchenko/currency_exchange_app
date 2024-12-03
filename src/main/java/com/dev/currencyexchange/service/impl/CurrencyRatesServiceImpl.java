@@ -8,6 +8,8 @@ import com.dev.currencyexchange.repository.ExchangeRateLogRepository;
 import com.dev.currencyexchange.service.CurrencyRatesService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CurrencyRatesServiceImpl implements CurrencyRatesService {
+    private static final Logger LOG = LoggerFactory.getLogger(CurrencyRatesService.class);
 
     @Getter
     private final Map<String, Double> exchangeRates = new ConcurrentHashMap<>();
@@ -45,6 +48,7 @@ public class CurrencyRatesServiceImpl implements CurrencyRatesService {
 
         List<Currency> currencies = currencyRepository.findAll();
         if (currencies.isEmpty()) {
+            LOG.warn("No currencies found in the database");
             return;
         }
 
@@ -58,17 +62,20 @@ public class CurrencyRatesServiceImpl implements CurrencyRatesService {
 
             if (response.getStatusCode() == HttpStatus.OK) {
                 ExchangeRateResponse exchangeRateResponse = response.getBody();
-                if (exchangeRateResponse != null && exchangeRateResponse.getRates() != null) {
+                if (exchangeRateResponse.getRates() != null) {
                     exchangeRates.clear();
                     exchangeRates.putAll(exchangeRateResponse.getRates());
                     exchangeRateLogRepository.save(CurrencyRateLog.builder()
                             .baseCurrency(baseCurrency)
                             .rates(exchangeRateResponse.getRates())
                             .build());
+                    LOG.info("Exchange rates updated successfully for base currency {}", baseCurrency);
                 }
+            } else {
+                LOG.error("Failed to fetch exchange rates: {}", response.getStatusCode());
             }
         } catch (Exception e) {
-            System.out.println("Error fetching exchange rates");
+            LOG.error("Error fetching exchange rates", e);
         }
     }
 
