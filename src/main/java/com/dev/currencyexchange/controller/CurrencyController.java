@@ -2,6 +2,11 @@ package com.dev.currencyexchange.controller;
 
 import com.dev.currencyexchange.dto.CurrencyDto;
 import com.dev.currencyexchange.service.CurrencyService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +23,16 @@ public class CurrencyController {
 
     private final CurrencyService currencyService;
 
+    @Operation(summary = "Get a list of currencies used in the project.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful response.", content = {
+                    @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CurrencyDto.class)
+                    )
+            }),
+            @ApiResponse(responseCode = "400", description = "Not found."),
+            @ApiResponse(responseCode = "500", description = "Internal server error.")
+    })
     @GetMapping
     public ResponseEntity<List<CurrencyDto>> getAllCurrencies() {
         List<CurrencyDto> allCurrencies = currencyService.getAllCurrencies();
@@ -25,6 +40,16 @@ public class CurrencyController {
         return ResponseEntity.ok(allCurrencies);
     }
 
+    @Operation(summary = "Add new currency for getting exchange rates.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful response.", content = {
+                    @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = CurrencyDto.class)
+                    )
+            }),
+            @ApiResponse(responseCode = "400", description = "Not found."),
+            @ApiResponse(responseCode = "500", description = "Internal server error.")
+    })
     @PostMapping
     public ResponseEntity<CurrencyDto> addCurrency(@RequestBody CurrencyDto currencyDto) {
         CurrencyDto currency = currencyService.addCurrency(currencyDto);
@@ -32,6 +57,16 @@ public class CurrencyController {
         return ResponseEntity.ok(currency);
     }
 
+    @Operation(summary = "Get exchange rates for a currency.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful response.", content = {
+                    @Content(mediaType = "application/json",
+                            schema = @Schema(type = "number", format = "double", example = "1.23")
+                    )
+            }),
+            @ApiResponse(responseCode = "400", description = "Not found."),
+            @ApiResponse(responseCode = "500", description = "Internal server error.")
+    })
     @GetMapping("/{currencyCode}")
     public ResponseEntity<Double> getExchangeRateForCurrency(@PathVariable String currencyCode) {
         Double exchangeRate = currencyService.getExchangeRatesForCurrency(currencyCode);
