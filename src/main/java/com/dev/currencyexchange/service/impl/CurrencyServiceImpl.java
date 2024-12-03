@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 public class CurrencyServiceImpl implements CurrencyService {
     private static final Logger LOG = LoggerFactory.getLogger(CurrencyServiceImpl.class);
 
-
     private final CurrencyRepository currencyRepository;
     private final CurrencyRatesService currencyRatesService;
 

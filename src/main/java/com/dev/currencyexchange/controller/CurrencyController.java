@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,14 +70,13 @@ public class CurrencyController {
     })
     @GetMapping("/{currencyCode}")
     public ResponseEntity<Double> getExchangeRateForCurrency(@PathVariable String currencyCode) {
-        Double exchangeRate = currencyService.getExchangeRatesForCurrency(currencyCode);
-
-        if (exchangeRate == null) {
+        try {
+            Double exchangeRate = currencyService.getExchangeRatesForCurrency(currencyCode);
+            LOG.info("Returning exchange rate {} for currency {}", exchangeRate, currencyCode);
+            return ResponseEntity.ok(exchangeRate);
+        } catch (RuntimeException e) {
             LOG.warn("Exchange rate for currency {} not found", currencyCode);
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-
-        LOG.info("Returning exchange rate {} for currency {}", exchangeRate, currencyCode);
-        return ResponseEntity.ok(exchangeRate);
     }
 }
