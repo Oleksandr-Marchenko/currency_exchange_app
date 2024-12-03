@@ -17,14 +17,12 @@ Service for managing currencies and retrieving exchange rates using external API
   ```json
   [
       {
-          "id": "USD",
-          "name": "United States Dollar",
-          "symbol": "$"
+          "code": "USD",
+          "name": "Dollar",
       },
       {
-          "id": "EUR",
+          "code": "EUR",
           "name": "Euro",
-          "symbol": "€"
       }
   ]
   
@@ -32,9 +30,8 @@ Service for managing currencies and retrieving exchange rates using external API
   - **Request**:
   ```json
   {
-      "id": "GBP",
+      "code": "GBP",
       "name": "British Pound",
-      "symbol": "£"
   }
   ```
    - **Response**:
@@ -42,7 +39,6 @@ Service for managing currencies and retrieving exchange rates using external API
   {
       "id": "GBP",
       "name": "British Pound",
-      "symbol": "£"
   }
    ```
  - **`GET /currencies/{currencyCode}`** - Retrieves the exchange rate for a given currency.
