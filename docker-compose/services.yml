@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:17
+    container_name: currency-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ENC(jhSGJr94gVsIJHuZ8AYYo9YTpJB38SsBM5Iz5On80GPhyFuvE5QNAIvd2ZwostH0)
+      ENCRYPT_KEY: ${JASYPT_ENCRYPTOR_PASSWORD}"
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+volumes:
+  db-data:
