@@ -1,0 +1,25 @@
+api:
+  key: ENC(J9E59NwG7ecNfhKyU1wdQLhWiiVNkSbbTKDWStdW6F65HqWWCNVzoMsJELvCyaams2hekFWX4HmIifruG7JzoGy/EYDFo94OmtD0SIE7CyA=)
+
+base:
+  currency: EUR
+exchange:
+  api:
+    url: https://api.exchangeratesapi.io/v1/latest
+
+spring:
+  web:
+    servlet:
+      context-path: /api
+  datasource:
+    url: jdbc:postgresql://localhost:5432/currency_exchange_db
+    username: postgres
+    password: ENC(jhSGJr94gVsIJHuZ8AYYo9YTpJB38SsBM5Iz5On80GPhyFuvE5QNAIvd2ZwostH0)
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
