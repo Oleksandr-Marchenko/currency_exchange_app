@@ -37,7 +37,7 @@ Service for managing currencies and retrieving exchange rates using external API
    - **Response**:
    ```json
   {
-      "id": "GBP",
+      "code": "GBP",
       "name": "British Pound",
   }
    ```
